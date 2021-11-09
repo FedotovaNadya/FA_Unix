@@ -1,6 +1,6 @@
 import os
 #from settings import work_directory as wd
-wd= "C:\\Users\\Asus\\Desktop\\Test\\"
+wd= "C:\\Users\\Asus\\Desktop\\Test\\" #Папка для тестирования работы функций 
 
 def enter_name():
     name=input("Введите имя: ")
@@ -47,9 +47,9 @@ while session:
         session=False  
     elif act == "1": #"Создание папки"
         new_folder()
-    elif act=="2": #
-        del_folder()
-    elif act=="3":
+    elif act=="2": #Удаление папки по имени
+        del_folder() 
+    elif act=="3":#Перемещение между папками - заход в папку по имени
         pass
     elif act=="4":
         pass
