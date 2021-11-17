@@ -2,37 +2,56 @@ import os
 #from settings import work_directory as wd
 wd= "C:\\Users\\Asus\\Desktop\\Test\\" #Папка для тестирования работы функций 
 
-def dir_exists(new_path):
+def __dir_exists(new_path):
     if os.path.isdir(new_path):
         return True
     else:
         return False
 
-def enter_name(s=""):
+def __enter_name(s=""):
     s="Введите имя"+s+": "
     name=input(s)
     while name=="":
         print("Пустая строка не может быть именем")
         name=input(s)
     return name
-    
+
+def __valid_folder(folder_name):
+    if "\\" not in folder_name:
+        folder_name=os.getcwd()+"\\"+folder_name
+    elif os.getcwd()+"\\" in wd+folder_name:
+        folder_name=os.getcwd()+"\\"+folder_name
+    else:
+        Exception
+
+    #print(folder_name)
+    assert (wd in folder_name), "Не рабочая директория"
+    return folder_name
+
+
+
 def new_folder():#Создание папки (с указанием имени);
-    folder_name= wd+enter_name()
-    if not dir_exists(folder_name):
+    folder_name = __enter_name()
+    folder_name = __valid_folder(folder_name)
+    if not __dir_exists(folder_name):
         os.mkdir(folder_name)
         return True
     return False
 
 def del_folder():#Удаление папки по имени;
-    folder_name=wd+enter_name()
-    if dir_exists(folder_name):
+    folder_name=__enter_name()
+    folder_name = __valid_folder(folder_name)
+
+    if __dir_exists(folder_name):
         os.rmdir(folder_name) 
         return True
     return False
 
 def goto_folder():#переход по имени
-    folder_name=wd+enter_name()
-    if dir_exists(folder_name):
+    folder_name=__enter_name()
+    folder_name = __valid_folder(folder_name)
+
+    if __dir_exists(folder_name):
         os.chdir(folder_name) 
         return True
     return False
@@ -44,7 +63,8 @@ def goup_folder():#на уровень верх
     return False    
 
 def create_empty_file():#создание пустого файла
-    file_name = enter_name()
+    file_name = __enter_name()
+
     if ".txt" not in file_name:
         file_name+=".txt"
     f=open(file_name, "w")
@@ -53,7 +73,7 @@ def create_empty_file():#создание пустого файла
     #return False    
 
 def add_text_file():    #Запись текста в файл;
-    file_name = enter_name()
+    file_name = __enter_name()
     if ".txt" not in file_name:
         file_name+=".txt"
     with open(file_name, "a") as f:
@@ -63,15 +83,15 @@ def add_text_file():    #Запись текста в файл;
             msg=input("Введите строку, для окончания записи введите 0: ")+"\n"
 
 def viewing_text_file():#Просмотр содержимого текстового файла    
-    file_name = enter_name()
+    file_name = __enter_name()
     if ".txt" not in file_name:
         file_name+=".txt"
     with open(file_name, "r") as f:
         for line in f:
             print(line[:-1])
 
-def delete_file():#удаление файла
-    file_name = enter_name()
+def del_file():#удаление файла
+    file_name = __enter_name()
     if ".txt" not in file_name:
         file_name+=".txt"
     try:
@@ -79,20 +99,28 @@ def delete_file():#удаление файла
     except:
         print("не удалось")
 
-#ДОДЕОЛАТЬ
 def copying_file():#Копирует один файл
     try:
-        file_name = enter_name(" копируемого файла")
+        file_name = __enter_name(" копируемого файла")
         if ".txt" not in file_name:
             file_name+=".txt"
-        folder_name=wd+enter_name()
+        print("point1")
+        folder_name=__enter_name()
+        folder_name = __valid_folder(folder_name)
+        print("point2")
         file_text=""
         with open(file_name, "r") as f:
             file_text=f.read()
-        if dir_exists(folder_name):
+            print("point3")
+            f.close()
+        if __dir_exists(folder_name):
             os.chdir(folder_name)
+            print("point4")
             with open(file_name, "w") as f:
-                file_text=f.write()
+                print("point5")
+                f.write(file_text)
+                print("point6")
+                f.close()
     except:
         print("error")    
         
@@ -101,20 +129,25 @@ def copying_file():#Копирует один файл
 
 #Перемещение
 def move_file():
+    wd_now=os.getcwd()
     try:
-        file_name = enter_name(" перемещаемого файла")
+        file_name = __enter_name(" перемещаемого файла")
         if ".txt" not in file_name:
             file_name+=".txt"
-        folder_name=wd+enter_name()
+        folder_name=__enter_name()
+        folder_name = __valid_folder(folder_name)
+
         file_text=""
         with open(file_name, "r") as f:
             file_text=f.read()
-        delete_file()
-        if dir_exists(folder_name):
+            f.close()
+        
+        if __dir_exists(folder_name):
             os.chdir(folder_name)
             with open(file_name, "w") as f:
-                file_text=f.write()
-        
+                f.write(file_text)
+            os.chdir(wd_now)
+        os.remove(file_name)
     except:
         print("error")    
         
@@ -122,10 +155,10 @@ def move_file():
     return False
 
 def rename_file():
-    old_file_name = enter_name()
+    old_file_name = __enter_name()
     if ".txt" not in old_file_name:
         old_file_name+=".txt"
-    new_file_name = enter_name()
+    new_file_name = __enter_name()
     if ".txt" not in new_file_name:
         new_file_name+=".txt"
     os.rename(old_file_name, new_file_name)
