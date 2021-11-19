@@ -1,6 +1,17 @@
 import os
-#from settings import work_directory as wd
-wd= "C:\\Users\\Asus\\Desktop\\Test\\" #Папка для тестирования работы функций 
+from file_manager_settings import work_directory as wd
+#wd= "C:\\Users\\Asus\\Desktop\\Test\\" #Папка для тестирования работы функций 
+r_wd=""
+now_wd=""
+if wd[-1] == "\\":
+    if "\\" in wd[:-1]:
+        ind = wd[:-1].rindex("\\")
+        r_wd = wd[ind+1:]
+    else:
+        r_wd = wd
+else:
+    r_wd=wd
+now_wd = r_wd
 
 def __dir_exists(new_path):
     if os.path.isdir(new_path):
@@ -32,7 +43,8 @@ def __valid_folder(folder_name):
 
 def new_folder():#Создание папки (с указанием имени);
     folder_name = __enter_name()
-    folder_name = __valid_folder(folder_name)
+    #folder_name = __valid_folder(folder_name)
+    assert "\\" not in folder_name
     if not __dir_exists(folder_name):
         os.mkdir(folder_name)
         return True
@@ -49,10 +61,12 @@ def del_folder():#Удаление папки по имени;
 
 def goto_folder():#переход по имени
     folder_name=__enter_name()
-    folder_name = __valid_folder(folder_name)
+    new_folder_name = __valid_folder(folder_name)
 
-    if __dir_exists(folder_name):
-        os.chdir(folder_name) 
+    if __dir_exists(new_folder_name):
+        os.chdir(new_folder_name)
+        global now_wd
+        now_wd+=folder_name
         return True
     return False
 
@@ -104,22 +118,16 @@ def copying_file():#Копирует один файл
         file_name = __enter_name(" копируемого файла")
         if ".txt" not in file_name:
             file_name+=".txt"
-        print("point1")
         folder_name=__enter_name()
-        folder_name = __valid_folder(folder_name)
-        print("point2")
+        folder_name = __valid_folder(folder_name) 
         file_text=""
         with open(file_name, "r") as f:
             file_text=f.read()
-            print("point3")
             f.close()
         if __dir_exists(folder_name):
             os.chdir(folder_name)
-            print("point4")
             with open(file_name, "w") as f:
-                print("point5")
                 f.write(file_text)
-                print("point6")
                 f.close()
     except:
         print("error")    
@@ -134,20 +142,25 @@ def move_file():
         file_name = __enter_name(" перемещаемого файла")
         if ".txt" not in file_name:
             file_name+=".txt"
+#        print("point1")
         folder_name=__enter_name()
         folder_name = __valid_folder(folder_name)
-
+#        print("point2")
         file_text=""
         with open(file_name, "r") as f:
             file_text=f.read()
             f.close()
-        
+#        print("point3")
         if __dir_exists(folder_name):
+#            print("point4")
             os.chdir(folder_name)
             with open(file_name, "w") as f:
+#                print("point5")
                 f.write(file_text)
             os.chdir(wd_now)
+#            print("point6")
         os.remove(file_name)
+#        print("point7")
     except:
         print("error")    
         
@@ -162,4 +175,8 @@ def rename_file():
     if ".txt" not in new_file_name:
         new_file_name+=".txt"
     os.rename(old_file_name, new_file_name)
+#просмотр файлов
+def view_files():
+    for i in  os.listdir(path="."):
+        print(i)
 

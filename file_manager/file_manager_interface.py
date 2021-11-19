@@ -1,6 +1,4 @@
 import file_manager_functions as fmf
-#from settings import work_directory as wd
-wd= "C:\\Users\\Asus\\Desktop\\Test\\" #Папка для тестирования работы функций 
 
 session = 1
 actions=[
@@ -15,19 +13,20 @@ actions=[
     ["Удаление файлов по имени",fmf.del_file], 
     ["Копирование файлов из одной папки в другую",fmf.copying_file],
     ["Перемещение файлов",fmf.move_file], 
-    ["Переименование файлов",fmf.rename_file]
+    ["Переименование файлов",fmf.rename_file], 
+    ["Вывод файлов в директории", fmf.view_files],
 ]
 
-fmf.os.chdir(wd)    
+fmf.os.chdir(fmf.wd)    
 
 while session:
+    print("Текущая директория:",fmf.now_wd)
     #вывод возможных действий
     print("Выберите действие: ")
     for i in range(len(actions)):
         msg=" {0:2d} - {1}".format(i,actions[i][0])
         print(msg)
 
-    print(fmf.os.getcwd())
     act=input("Введите номер действия: ")
     if act=="0":
         print("До свидания!")
