@@ -27,6 +27,9 @@ try:
                 #получение данных от клиента
                 print('\nReceiving data from client:')
                 print(data)
+                if data.lower() == 'exit':
+                    print('here')
+                    break
             msg = input('\nEnter text to client:\n').encode('utf-8')
             #отправка сообщений клиенту
             client_socket.send(msg)
