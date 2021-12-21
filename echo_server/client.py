@@ -1,7 +1,7 @@
 #import
 import socket
 import time
-200
+
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 port = int(input('Type here a number of port you want to connect (default is 2000)\n'))
 name = input('Type here a hostname you want to connect (default is localhost)\n')
@@ -22,7 +22,7 @@ while True:
         #Отправка данных серверу;
         cl_msg = input('Enter text to server:\n').encode('utf-8')
         client.send(cl_msg)
-        print(cl_msg)
+        #print(cl_msg)
         if cl_msg.lower() == b'exit':
             break
         data = client.recv(2048).decode('utf-8')

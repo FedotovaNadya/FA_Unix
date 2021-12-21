@@ -1,8 +1,16 @@
 #import
 import socket
 import time
+import logging
 #Запуск сервера
-print('Starting server...')
+
+def log_print(st):
+    logging.info(st)
+    print(st)
+
+logging.basicConfig(filename='server.log', encoding='utf-8', level=logging.INFO)
+
+log_print('Starting server...')
 PORT = 2000
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -13,7 +21,7 @@ try:
         server.listen(1)
         #подключение клента
         client_socket, address = server.accept()
-        print(f'User with ip {address} connected')
+        log_print(f'User with ip {address} connected')
         
         client_socket.send('You are connected!'.encode('utf-8'))
         while True:
@@ -25,10 +33,10 @@ try:
             time.sleep(3)
             if data:
                 #получение данных от клиента
-                print('\nReceiving data from client:')
-                print(data)
+                log_print('\nReceiving data from client:')
+                log_print(data)
                 if data.lower() == 'exit':
-                    print('here')
+                    log_print('here')
                     break
             msg = input('\nEnter text to client:\n').encode('utf-8')
             #отправка сообщений клиенту
@@ -36,7 +44,7 @@ try:
             if msg == 'exit'.encode('utf-8'):
                 time.sleep(2)
                 #отключение клиента
-                print('exit command found')
+                log_print('exit command found')
                 server.shutdown(socket.SHUT_WR)
                 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -44,8 +52,8 @@ try:
                 break
 #остановка сервера                
 except KeyboardInterrupt:
-    print('Server is shutting down')
+    log_print('Server is shutting down')
     server.shutdown(socket.SHUT_WR)
 except BrokenPipeError:
-    print('Server doesnt have active users...\nShutting down!')
+    log_print('Server doesnt have active users...\nShutting down!')
     server.shutdown(socket.SHUT_WR)
