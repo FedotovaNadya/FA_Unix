@@ -13,14 +13,19 @@ def genResp(dat):
   d=dat.split()
   print( d)
   fn =d[1]
-  if fn[0] == "/":
+  if len(fn)>1:
     fn=fn[1:]
+    print ("if")
+  else:
+    return "index.html"
   if fn in os.listdir(wd):
     print("qwer")
+    return fn
   else:
     print("jasdj")
-  return fn
+    return "404.html"
 
+  
 
 
 
@@ -50,10 +55,12 @@ while True:
           log_print('here')
           break
       #отправка сообщений клиенту
+      print("----")
       file=genResp(data)
       with open(wd+file, "r") as f:
         resp = "HTTP/1.1 200 OK \n\n"+f.read()
       print("he134re")
+      
       conn.send(resp.encode())
 
 conn.close()
