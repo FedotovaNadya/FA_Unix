@@ -1,3 +1,5 @@
+"""Caesar cipher"""
+
 def encrypt(k:int,  m:str)->str:
     m_arr = []
     rez = ""
@@ -26,7 +28,6 @@ def decrypt_without_key(c):
             alph[i]+=1
         else:
             alph[i]=1
-    print(alph)
     max_al=0
     max_k=-1
     for i in alph:
